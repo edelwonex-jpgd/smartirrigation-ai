@@ -7,7 +7,9 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 from sklearn.model_selection import train_test_split
 
 ROOT = Path(__file__).resolve().parent
-DATASET = ROOT / 'synthetic_irrigation.csv'
+DATASET = ROOT / 'data' / 'synthetic_irrigation.csv'
+if not DATASET.exists():
+    DATASET = ROOT / 'synthetic_irrigation.csv'  # fallback untuk upload GitHub tanpa folder
 FEATURES = ['soil_moisture_pct', 'field_capacity_pct', 'wilting_point_pct',
             'temperature_c', 'forecast_rain_mm', 'root_depth_cm', 'crop_stage']
 CATEGORIES = ['Belum perlu', 'Pantau', 'Perlu irigasi']

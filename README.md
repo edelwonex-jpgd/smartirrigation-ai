@@ -1,49 +1,30 @@
-# 🌱 SmartIrrigation AI
+# SmartIrrigation AI — Future Farming Edition
 
-**Prototipe aplikasi web AI untuk edukasi agroekoteknologi tanaman cabai.** Menggunakan model `RandomForestClassifier` yang dilatih pada **data sintetis**, bukan data sensor nyata. Termasuk formulir input, prediksi kelas kebutuhan irigasi, estimasi defisit kadar air, analisis massal CSV, evaluasi model, dan unduh hasil.
+Website **Streamlit** untuk demonstrasi klasifikasi kebutuhan irigasi tanaman cabai dengan **Random Forest**, menggunakan *dataset sintetis*. Desain dark-glassmorphism, grafik Plotly, evaluasi model, serta analisis CSV massal.
 
+## Deployment gratis di Streamlit Cloud
 
+1. Unduh ZIP lalu ekstrak. Upload **seluruh isi folder** (bukan ZIP) ke repository GitHub, melalui **Add file → Upload files**.
+2. Pastikan `app.py`, `model.py`, `requirements.txt`, `generate_data.py` dan `data/synthetic_irrigation.csv` ada. Folder `.streamlit` berisi `config.toml` untuk tema.
+3. Buka https://share.streamlit.io → **Create app** → pilih repository, branch `main`, main file `app.py` → **Deploy**.
+4. Bila dataset Anda sebelumnya diunggah ke **root** (`synthetic_irrigation.csv`), `model.py` versi ini mendukung lokasi root maupun folder `data/`.
+5. Sebaiknya upload **dengan mempertahankan struktur folder** untuk `.streamlit/config.toml` dan `tests/test_model.py`. Perhatikan GitHub drag-and-drop harus memasukkan folder, bukan hanya file satu per satu.
 
-## Struktur
+**Penting saat update dari versi sebelumnya:** Timpa minimal `app.py`, `model.py`, `requirements.txt`. `data/synthetic_irrigation.csv` lama tetap kompatibel. Konfigurasi tema `.streamlit/config.toml` sangat dianjurkan.
 
-- `app.py`: antarmuka Streamlit
-- `model.py`: generator dataset, validasi, pelatihan dan prediksi ML
-- `generate_data.py`: skrip membuat ulang dataset deterministik
-- `data/synthetic_irrigation.csv`: dataset latihan sintetis (2.400 baris)
-- `requirements.txt`: paket Python
-- `.streamlit/config.toml`: tema aplikasi
-- `tests/test_model.py`: pengujian model
-
-## Jalankan secara lokal (Windows / macOS / Linux)
-
-Instal Python 3.11 atau 3.12, buka terminal di folder proyek, lalu:
+## Jalankan lokal
 
 ```bash
 python -m pip install -r requirements.txt
 python -m streamlit run app.py
 ```
 
-Buka URL localhost yang ditampilkan terminal (biasanya `http://localhost:8501`). Model dilatih ulang dari CSV saat aplikasi pertama kali dijalankan, lalu di-cache selama sesi server. Tidak ada file pickle/joblib yang harus dipercaya atau diunggah.
+## Tes
 
-
-
+```bash
+python -m unittest discover -s tests -v
 ```
 
-## Dataset & pendekatan
+## Catatan ilmiah
 
-Dataset dibuat dengan NumPy RNG seed 42, 2.400 baris. Variabel: kadar air tanah volumetrik (%), kapasitas lapang (%), titik layu permanen (%), suhu (°C), prakiraan hujan (mm), kedalaman akar (cm), fase pertumbuhan. Label kelas dibuat dengan aturan simulasi yang menggunakan fraksi air tersedia dan faktor penyesuaian sederhana. Model mempelajari label tersebut menggunakan Random Forest, dilatih pada 80% baris dan diuji pada 20% baris dengan stratifikasi. Hasil evaluasi hanya mengukur peniruan aturan generator data.
-
-Perkiraan defisit air memakai `max(0, FC - theta) * depth_cm / 10` dalam satuan mm; kedalaman bruto dibagi 0,85. Persentase harus bersatuan **volumetric water content**, bukan persentase relatif keluaran sensor belum dikalibrasi. Rumus ini tidak mensimulasikan neraca air harian dan bukan penentuan jadwal irigasi.
-
-## Pengembangan untuk penelitian nyata
-
-1. Kalibrasi ESP32 dan sensor kelembapan ke kadar air volumetrik pada tanah yang diteliti.
-2. Ukur kapasitas lapang, titik layu, kedalaman akar efektif, suhu, hujan dan hasil produksi secara nyata.
-3. Susun label keputusan irigasi berdasarkan protokol eksperimen dan pengukuran; jangan memakai label sintetis untuk klaim efektivitas agronomis.
-4. Lakukan validasi pada musim/lokasi dan data uji terpisah. Catat metrik F1, precision-recall serta dampak perlakuan terhadap pertumbuhan/hasil.
-5. Jika kelak mengotomatisasi pompa, tambahkan kontrol keselamatan, batas waktu, sensor fail-safe, dan override manual.
-
-## Referensi deployment
-
-- https://docs.streamlit.io/deploy/streamlit-community-cloud
-- https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy
+Dataset sintetis berisi 2.400 baris yang dibuat dengan aturan hipotetis. Akurasi pada data uji sintetis **tidak** membuktikan ketepatan lapangan. Persentase kadar air input harus berupa **volumetric water content (VWC)**; nilai sensor perlu kalibrasi. Estimasi air net/bruto bersifat ilustratif, tidak memperhitungkan ET, infiltrasi atau hujan efektif. Tidak ada kendali pompa.
