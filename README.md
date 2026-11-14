@@ -2,7 +2,7 @@
 
 **Prototipe aplikasi web AI untuk edukasi agroekoteknologi tanaman cabai.** Menggunakan model `RandomForestClassifier` yang dilatih pada **data sintetis**, bukan data sensor nyata. Termasuk formulir input, prediksi kelas kebutuhan irigasi, estimasi defisit kadar air, analisis massal CSV, evaluasi model, dan unduh hasil.
 
-> ⚠️ Tidak disarankan digunakan sebagai dasar tunggal keputusan irigasi lapangan. Semua nilai skor model adalah evaluasi pada data simulasi saja. Tidak ada kontrol pompa, IoT langsung, dan kalibrasi sensor.
+
 
 ## Struktur
 
@@ -25,21 +25,8 @@ python -m streamlit run app.py
 
 Buka URL localhost yang ditampilkan terminal (biasanya `http://localhost:8501`). Model dilatih ulang dari CSV saat aplikasi pertama kali dijalankan, lalu di-cache selama sesi server. Tidak ada file pickle/joblib yang harus dipercaya atau diunggah.
 
-## Deploy gratis ke Streamlit Community Cloud
 
-1. Masuk ke [github.com](https://github.com), buat repository baru bernama `smartirrigation-ai` (Public).
-2. Ekstrak ZIP proyek ini. Di halaman repo GitHub klik **Add file → Upload files**, lalu unggah seluruh **isi folder proyek** (jangan ZIP saja). Pastikan `app.py`, `requirements.txt`, `model.py`, serta folder `data` ada di level teratas repo. Folder `.streamlit` opsional apabila sulit diunggah lewat browser.
-3. Klik **Commit changes**.
-4. Buka [share.streamlit.io](https://share.streamlit.io), login melalui GitHub, klik **Create app** → **Yup, I have an app**.
-5. Pilih repository `smartirrigation-ai`, branch `main`, main file path `app.py`, dan pilih subdomain yang tersedia. Klik **Deploy**.
-6. Setelah sukses, bagikan tautan berbentuk `https://subdomain-yang-kamu-pilih.streamlit.app/`.
 
-> URL publik hanya tersedia setelah **kamu sendiri** mengunggah repository dan melakukan deployment. Proyek ini belum otomatis dipublikasikan.
-
-## Jalankan pengujian
-
-```bash
-python -m unittest discover -s tests -v
 ```
 
 ## Dataset & pendekatan
